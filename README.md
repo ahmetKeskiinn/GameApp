@@ -10,3 +10,6 @@ Programın amacı : rawg.io servisinden oyun bilgileri çekilip programda göste
 * Kullanılan Mimari: MVVM
 * Kullanılan API linki: https://rawg.io/apidocs
 * Kullanılan Yapılar: recyclerview, viewpager, Retrofit, RoomDB, LiveData
+
+### NOT
+>APK dosyaların içerisinde "app-debug.apk" şeklinde eklenmiştir. Ayrıca üretilmesine gerek yoktur.

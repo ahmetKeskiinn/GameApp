@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="topColor">#006400</color>
+    <color name="viewpagerTextColor">#40e0d0</color>
 </resources>

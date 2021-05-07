@@ -1,8 +1,11 @@
 package example.com.newgameapp.ShowDetails
 
 import android.annotation.SuppressLint
+import android.app.Service
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.ConnectivityManager
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,6 +15,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModelProviders
 import example.com.newgameapp.Fav.ViewModel.FavViewModel
 import example.com.newgameapp.Models.Detail.ExampleDetail
@@ -74,14 +78,31 @@ class ShowDetails : AppCompatActivity(),View.OnClickListener {
         })
         DownloadImageFromInternet(imageView).execute(url)
     }
-    override fun onClick(v: View?) {
-        if(v == likeButton){
-            vm = ViewModelProviders.of(this)[FavViewModel::class.java]
-            vm.insert(FavModel(nameTw.text.toString(),releaseDateTw.text.toString(),metacriticTw.text.toString(),rating,url,id))
-            Toast.makeText(this, getString(R.string.addedFav), Toast.LENGTH_SHORT).show()
-
+    private fun checkNetwork(): Boolean {
+        val connManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connManager.activeNetworkInfo
+        if(networkInfo !=null){
+            return true
+        }
+        else{
+            return false
         }
     }
+    override fun onClick(v: View?) {
+        if (checkNetwork()) {
+            if (v == likeButton) {
+                vm = ViewModelProviders.of(this)[FavViewModel::class.java]
+                vm.insert(FavModel(nameTw.text.toString(), releaseDateTw.text.toString(), metacriticTw.text.toString(), rating, url, id))
+                Toast.makeText(this, getString(R.string.addedFav), Toast.LENGTH_SHORT).show()
+            }
+        }
+        else if (!checkNetwork()) {
+                Toast.makeText(this, getString(R.string.turninternet), Toast.LENGTH_SHORT).show()
+        }
+
+
+        }
+
     @SuppressLint("StaticFieldLeak")
     @Suppress("DEPRECATION")
     private inner class DownloadImageFromInternet(var imageView: ImageView) : AsyncTask<String, Void, Bitmap?>() {

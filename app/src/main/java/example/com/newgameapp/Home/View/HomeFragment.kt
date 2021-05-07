@@ -1,6 +1,8 @@
 package example.com.newgameapp.Home.View
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,6 +12,8 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -19,7 +23,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
-import example.com.newgameapp.Adapters.PageAdapter
 import example.com.newgameapp.Adapters.ViewPagerAdapter
 import example.com.newgameapp.Home.HomeAdapter
 import example.com.newgameapp.Home.ViewModel.HomeViewModel
@@ -39,7 +42,6 @@ class HomeFragment : Fragment() {
     private lateinit var searchButton: ImageButton
     private lateinit var searchVideoGames: EditText
     private lateinit var sorry: TextView
-    private lateinit var pagerAdapter: PageAdapter
 
     var viewPager: ViewPager? = null
 
@@ -57,6 +59,17 @@ class HomeFragment : Fragment() {
             pager = it.findViewById(R.id.videoGamesViewPager)
             initialUI(it)
             initRecycler(it)
+            checkNetwork()
+        }
+    }
+    private fun checkNetwork() {
+        val connMgr = activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connMgr.activeNetworkInfo
+
+        if(networkInfo !=null){
+            }
+        else{
+            Toast.makeText(getActivity(),getString(R.string.turninternet),Toast.LENGTH_SHORT).show();
         }
     }
     private fun initialUI(fragmentActivity: FragmentActivity) {
@@ -67,13 +80,12 @@ class HomeFragment : Fragment() {
         sorry = fragmentActivity.findViewById(R.id.sorry)
         searchVideoGames.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                if(searchVideoGames.text.length>=3){
+                if (searchVideoGames.text.length >= 3) {
                     recyclerView.isVisible = true
                     tabLayout.visibility = View.GONE
                     pager.visibility = View.GONE
                     initialRecyclerViewForSearch()
-                }
-                else{
+                } else {
                     recyclerView.isVisible = true
                     sorry.visibility = View.GONE
                     tabLayout.isVisible = true
@@ -92,13 +104,19 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun initialViewPager(fragmentActivity: FragmentActivity , fragmentList: List<Game>) {
+    private fun initialViewPager(fragmentActivity: FragmentActivity, fragmentList: List<Game>) {
         tabLayout = fragmentActivity.findViewById<TabLayout>(R.id.videoGamesTablayout)
         viewPager = fragmentActivity.findViewById<ViewPager>(R.id.videoGamesViewPager)
 
 
 
-        val adapter = ViewPagerAdapter(context,fragmentActivity.supportFragmentManager,tabLayout!!.tabCount,fragmentList,fragmentList.size)
+        val adapter = ViewPagerAdapter(
+            context,
+            fragmentActivity.supportFragmentManager,
+            tabLayout!!.tabCount,
+            fragmentList,
+            fragmentList.size
+        )
         viewPager!!.adapter = adapter
         viewPager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
 
@@ -106,9 +124,11 @@ class HomeFragment : Fragment() {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 viewPager!!.currentItem = tab.position
             }
+
             override fun onTabUnselected(tab: TabLayout.Tab) {
 
             }
+
             override fun onTabReselected(tab: TabLayout.Tab) {
 
             }
@@ -154,13 +174,12 @@ class HomeFragment : Fragment() {
     }
     private fun initialRecyclerViewForSearch(){
         vm.getQueryGame(searchVideoGames.text.toString()).observe(this, Observer {
-            if(it.size!=0){
-                for(i in 0 .. it.size-1){
+            if (it.size != 0) {
+                for (i in 0..it.size - 1) {
                     sorry.isVisible = false
                     recyclerAdapter.submitList(it)
                 }
-            }
-            else{
+            } else {
                 recyclerView.isVisible = false
                 sorry.isVisible = true
             }
@@ -168,28 +187,28 @@ class HomeFragment : Fragment() {
     }
     private fun initialRecyclerViewForData(){
         vm.getAllGames().observe(this, Observer {
-           if(it.size== 20){
-               var list: List<Game?> = it
-               val fragmentList = mutableListOf<Game>()
-               for (i in 0..3) {
-                   if (i == 0) {
-                       list = list.drop(i)
-                       fragmentList.add(it.get(i))
-                   } else if (i == 1) {
-                       list = list.drop(i)
-                       fragmentList.add(it.get(i))
-                   } else if (i == 2) {
-                       list = list.drop(i)
-                       fragmentList.add(it.get(i))
-                   }
+            if (it.size == 20) {
+                var list: List<Game?> = it
+                val fragmentList = mutableListOf<Game>()
+                for (i in 0..3) {
+                    if (i == 0) {
+                        list = list.drop(i)
+                        fragmentList.add(it.get(i))
+                    } else if (i == 1) {
+                        list = list.drop(i)
+                        fragmentList.add(it.get(i))
+                    } else if (i == 2) {
+                        list = list.drop(i)
+                        fragmentList.add(it.get(i))
+                    }
 
-               }
-               recyclerAdapter.submitList(list)
-               activity?.let {
+                }
+                recyclerAdapter.submitList(list)
+                activity?.let {
 
-                   initialViewPager(it , fragmentList)
-               }
-           }
+                    initialViewPager(it, fragmentList)
+                }
+            }
         })
     }
 

@@ -1,4 +1,4 @@
-package example.com.newgameapp.Fav
+package example.com.newgameapp.Fav.DB
 
 import android.content.Context
 import androidx.room.Database

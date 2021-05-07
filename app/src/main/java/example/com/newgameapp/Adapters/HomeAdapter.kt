@@ -17,18 +17,18 @@ import example.com.newgameapp.Models.Game.Game
 import example.com.newgameapp.R
 
 class HomeAdapter(private val onItemClickListener: (Game) -> Unit)
-    : ListAdapter<Game, HomeAdapter.NoteHolder>(
+    : ListAdapter<Game, HomeAdapter.HomeHolder>(
     diffCallback
 ) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
-            R.layout.note_item, parent,
+            R.layout.game_item, parent,
             false)
-        return NoteHolder(itemView)
+        return HomeHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: NoteHolder, position: Int) {
+    override fun onBindViewHolder(holder: HomeHolder, position: Int) {
         with(getItem(position)) {
             holder.nameTw.text = name
             holder.ratingTw.text  = rating
@@ -37,10 +37,10 @@ class HomeAdapter(private val onItemClickListener: (Game) -> Unit)
             DownloadImageFromInternet(holder.gameImageView).execute(game_image)
         }
     }
-    fun getNoteAt(position: Int) = getItem(position)
+    fun getGameAt(position: Int) = getItem(position)
 
 
-    inner class NoteHolder(iv: View) : RecyclerView.ViewHolder(iv) {
+    inner class HomeHolder(iv: View) : RecyclerView.ViewHolder(iv) {
 
         val nameTw: TextView = itemView.findViewById(R.id.text_view_title)
         val ratingTw: TextView = itemView.findViewById(R.id.ratingTw)
@@ -57,10 +57,6 @@ class HomeAdapter(private val onItemClickListener: (Game) -> Unit)
     @SuppressLint("StaticFieldLeak")
     @Suppress("DEPRECATION")
     private inner class DownloadImageFromInternet(var imageView: ImageView) : AsyncTask<String, Void, Bitmap?>() {
-        init {
-            //Toast.makeText(applicationContext, "Please wait, it may take a few minute...",     Toast.LENGTH_SHORT).show()
-            Log.d("TAG", ":+++++++ ")
-        }
         override fun doInBackground(vararg urls: String): Bitmap? {
             val imageURL = urls[0]
             var image: Bitmap? = null

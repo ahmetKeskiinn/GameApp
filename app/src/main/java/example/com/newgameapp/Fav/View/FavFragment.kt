@@ -1,7 +1,6 @@
-package example.com.newgameapp.Fav
+package example.com.newgameapp.Fav.View
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +10,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import example.com.newgameapp.Adapters.FavAdapter
+import example.com.newgameapp.Fav.ViewModel.FavViewModel
 import example.com.newgameapp.Home.HomeAdapter
 import example.com.newgameapp.R
 
@@ -53,17 +54,11 @@ class FavFragment : Fragment() {
         vm = ViewModelProviders.of(this)[FavViewModel::class.java]
 
         vm.getAllGames().observe(this, Observer {
-            Log.i("Notes observed", "$it")
-            Log.d("TAG", "onViewCreated: asdsadsadsadas")
-
-            recyclerAdapter.submitList(it)
+                       recyclerAdapter.submitList(it)
         })
     }
 
 
     private fun initViewModel(){
-        // vm =ViewModelProvider(favFragment).get(LikedViewModel::class.java)
-//        vm = ViewModelProviders.of(this)[LikedViewModel::class.java]
-
     }
 }

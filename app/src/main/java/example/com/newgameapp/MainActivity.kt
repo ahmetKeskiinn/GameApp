@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import example.com.newgameapp.Fav.FavFragment
-import example.com.newgameapp.Home.HomeFragment
+import example.com.newgameapp.Fav.View.FavFragment
+import example.com.newgameapp.Home.View.HomeFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
 
         val homeFragment = HomeFragment()
-        val favFragment =   FavFragment()
+        val favFragment = FavFragment()
         makeCurrentFragment(homeFragment)
         val bottom_Nav = findViewById<BottomNavigationView>(R.id.bottom_nav)
         bottom_Nav.setOnNavigationItemSelectedListener{

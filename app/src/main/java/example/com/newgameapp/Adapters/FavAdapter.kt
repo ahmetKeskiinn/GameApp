@@ -1,4 +1,4 @@
-package example.com.newgameapp.Fav
+package example.com.newgameapp.Adapters
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
@@ -60,10 +60,7 @@ class FavAdapter(private val onItemClickListener: (FavModel) -> Unit)
     @SuppressLint("StaticFieldLeak")
     @Suppress("DEPRECATION")
     private inner class DownloadImageFromInternet(var imageView: ImageView) : AsyncTask<String, Void, Bitmap?>() {
-        init {
-            //Toast.makeText(applicationContext, "Please wait, it may take a few minute...",     Toast.LENGTH_SHORT).show()
-            Log.d("TAG", ":+++++++ ")
-        }
+
         override fun doInBackground(vararg urls: String): Bitmap? {
             val imageURL = urls[0]
             var image: Bitmap? = null

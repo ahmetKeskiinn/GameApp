@@ -1,10 +1,9 @@
-package example.com.newgameapp.Home
+package example.com.newgameapp.Home.View
 
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,12 +21,14 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import example.com.newgameapp.Adapters.PageAdapter
 import example.com.newgameapp.Adapters.ViewPagerAdapter
+import example.com.newgameapp.Home.HomeAdapter
+import example.com.newgameapp.Home.ViewModel.HomeViewModel
 import example.com.newgameapp.Models.Game.Game
 import example.com.newgameapp.R
 import example.com.newgameapp.ShowDetails.ShowDetails
 import example.com.newgameapp.Utils.RetrofitService
 import example.com.newgameapp.Utils.SharedPreferences
-import kotlin.math.log
+
 
 class HomeFragment : Fragment() {
     private lateinit var tabLayout: TabLayout;
@@ -71,7 +72,6 @@ class HomeFragment : Fragment() {
                     tabLayout.visibility = View.GONE
                     pager.visibility = View.GONE
                     initialRecyclerViewForSearch()
-                    Log.d("TAG", "afterTextChanged: "+ searchVideoGames.text.toString())
                 }
                 else{
                     recyclerView.isVisible = true
@@ -87,7 +87,6 @@ class HomeFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                Log.d("TAG", "onTextChanged: "+searchVideoGames.text.toString())
             }
         })
 
@@ -121,10 +120,10 @@ class HomeFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(fragmentActivity)
         recyclerView.setHasFixedSize(true)
 
-        recyclerAdapter = HomeAdapter { clickedNote ->
+        recyclerAdapter = HomeAdapter { clickedGame ->
             val intent = Intent(fragmentActivity, ShowDetails::class.java)
-            intent.putExtra("id", clickedNote.game_id.toString())
-            intent.putExtra("image", clickedNote.game_image.toString())
+            intent.putExtra("id", clickedGame.game_id.toString())
+            intent.putExtra("image", clickedGame.game_image.toString())
 
             startActivity(intent)
             searchVideoGames.setText("")
@@ -137,23 +136,26 @@ class HomeFragment : Fragment() {
     private fun initMV() {
         val key = "185dba4e62b64f699699201d01021097"
         val count : Int = SharedPreferences().getCount(context!!)
-        Log.d("TAG", "initMV: "+count)
+
 
         vm.hook(RetrofitService.getInstance(), key)
-        vm.gameList.observe(this, Observer {
-            kotlin.runCatching {
-                initialRecyclerViewForData()
+        /*vm.gameList.observe(this, Observer {
+            if (it.size == 20) {
+                kotlin.runCatching {
+                    initialRecyclerViewForData()
+                }
+            } else {
+                Log.d("TAG", "initMV: "+"asdsaa")
             }
 
-        })
-
+        })*/
+        initialRecyclerViewForData()
 
     }
     private fun initialRecyclerViewForSearch(){
         vm.getQueryGame(searchVideoGames.text.toString()).observe(this, Observer {
             if(it.size!=0){
                 for(i in 0 .. it.size-1){
-                    Log.d("TAG", "yy: "+it.get(i).game_id)
                     sorry.isVisible = false
                     recyclerAdapter.submitList(it)
                 }
@@ -166,33 +168,29 @@ class HomeFragment : Fragment() {
     }
     private fun initialRecyclerViewForData(){
         vm.getAllGames().observe(this, Observer {
-            var list: List<Game?> = it
-            val fragmentList = mutableListOf<Game>()
-            Log.d("TAG", "initMV: " + it.size)
-            for (i in 0..3) {
-                if (i == 0) {
-                    list = list.drop(i)
-                    fragmentList.add(it.get(i))
-                    Log.d("TAG", "initMV: " + it.get(i))
-                } else if (i == 1) {
-                    list = list.drop(i)
-                    fragmentList.add(it.get(i))
-                    Log.d("TAG", "initMV: " + it.get(i))
-                } else if (i == 2) {
-                    list = list.drop(i)
-                    fragmentList.add(it.get(i))
-                    Log.d("TAG", "initMV: " + it.get(i))
+           if(it.size== 20){
+               var list: List<Game?> = it
+               val fragmentList = mutableListOf<Game>()
+               for (i in 0..3) {
+                   if (i == 0) {
+                       list = list.drop(i)
+                       fragmentList.add(it.get(i))
+                   } else if (i == 1) {
+                       list = list.drop(i)
+                       fragmentList.add(it.get(i))
+                   } else if (i == 2) {
+                       list = list.drop(i)
+                       fragmentList.add(it.get(i))
+                   }
 
-                }
+               }
+               recyclerAdapter.submitList(list)
+               activity?.let {
 
-            }
-            recyclerAdapter.submitList(list)
-            activity?.let {
-
-                initialViewPager(it , fragmentList)
-            }
-
-
+                   initialViewPager(it , fragmentList)
+               }
+           }
         })
     }
+
 }

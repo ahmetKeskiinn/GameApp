@@ -13,7 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
-import example.com.newgameapp.Fav.FavViewModel
+import example.com.newgameapp.Fav.ViewModel.FavViewModel
 import example.com.newgameapp.Models.Detail.ExampleDetail
 import example.com.newgameapp.Models.Fav.FavModel
 import example.com.newgameapp.R
@@ -52,16 +52,13 @@ class ShowDetails : AppCompatActivity(),View.OnClickListener {
         likeButton.setOnClickListener(this)
         id = intent.getStringExtra("id").toString()
         url = intent.getStringExtra("image").toString()
-        Log.d("TAG", "initialUI: "+id)
         hook(RetrofitService.getInstance(),"185dba4e62b64f699699201d01021097",id)
     }
     fun hook(retrofitService: RetrofitService, key:String?, id : String) {
         val call: Call<ExampleDetail> = retrofitService.getSelectedGame(id,key)
         call.enqueue(object : Callback<ExampleDetail> {
             override fun onResponse(call: Call<ExampleDetail>, response: Response<ExampleDetail>) {
-                Log.d("TAG", "onResponse: " +response.isSuccessful)
-                Log.d("TAG", "onResponse: " + response.code())
-                Log.d("TAG", "onResponse: "+response.body()!!.getData())
+
                 val item: String? = response.body()!!.getData()
                 val itemSplit : List<String>? = item?.split("?!")
                 titleTw.text = itemSplit!!.get(0)
@@ -90,7 +87,6 @@ class ShowDetails : AppCompatActivity(),View.OnClickListener {
     private inner class DownloadImageFromInternet(var imageView: ImageView) : AsyncTask<String, Void, Bitmap?>() {
         init {
             //Toast.makeText(applicationContext, "Please wait, it may take a few minute...",     Toast.LENGTH_SHORT).show()
-            Log.d("TAG", ":+++++++ ")
         }
         override fun doInBackground(vararg urls: String): Bitmap? {
             val imageURL = urls[0]

@@ -1,4 +1,4 @@
-package example.com.newgameapp.Home
+package example.com.newgameapp.Home.DB
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
@@ -17,7 +17,7 @@ interface HomeDao {
     fun delete(home: Game)
 
     @Query("delete from game")
-    fun deleteAllNotes()
+    fun deleteAllGames()
 
     @Query("SELECT * FROM Game WHERE name LIKE '%' || (:query) || '%'")
     fun getQueryGame(query: String): LiveData<List<Game>>
@@ -26,5 +26,5 @@ interface HomeDao {
     fun getAllGamesCount():Int
 
     @Query("select * from game order by game_id asc")
-    fun getAllNotes(): LiveData<List<Game>>
+    fun getAllGames(): LiveData<List<Game>>
 }

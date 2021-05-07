@@ -1,4 +1,4 @@
-package example.com.newgameapp.Fav
+package example.com.newgameapp.Fav.DB
 
 import androidx.lifecycle.LiveData
 import androidx.room.*

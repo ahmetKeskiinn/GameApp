@@ -1,4 +1,4 @@
-package example.com.newgameapp.Home
+package example.com.newgameapp.Home.DB
 
 import android.content.Context
 import androidx.room.Database
@@ -19,7 +19,7 @@ abstract class HomeDataBase : RoomDatabase() {
         fun getInstance(ctx: Context): HomeDataBase {
             if(instance == null)
                 instance = Room.databaseBuilder(ctx.applicationContext, HomeDataBase::class.java,
-                    "note_database")
+                    "game_database")
                     .fallbackToDestructiveMigration()
                     .addCallback(roomCallback)
                     .build()

@@ -9,12 +9,12 @@ import example.com.newgameapp.ViewPagerFragment
 
 class ViewPagerAdapter(private val myContext: Context?, fm: FragmentManager, internal var totalTabs: Int, private val list: List<Game>, private val count: Int) : FragmentPagerAdapter(fm) {
 
-    // this is for fragment tabs
+
     override fun getItem(position: Int): Fragment {
         return ViewPagerFragment(list.get(position).name ,list.get(position).game_id, list.get(position).game_image,list.get(position).rating , list.get(position).released)
     }
 
-    // this counts total number of tabs
+
     override fun getCount(): Int {
         return totalTabs
     }

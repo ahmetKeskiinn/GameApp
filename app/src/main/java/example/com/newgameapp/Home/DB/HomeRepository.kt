@@ -1,4 +1,4 @@
-package example.com.newgameapp.Home
+package example.com.newgameapp.Home.DB
 
 import android.app.Application
 import androidx.lifecycle.LiveData
@@ -8,50 +8,50 @@ import example.com.newgameapp.Utils.subscribeOnBackground
 
 class HomeRepository(application: Application) {
 
-    private var noteDao: HomeDao
-    private var allNotes: LiveData<List<Game>>
+    private var homeDao: HomeDao
+    private var allGames: LiveData<List<Game>>
 
     private val database = HomeDataBase.getInstance(application)
 
     init {
-        noteDao = database.homeDao()
-        allNotes = noteDao.getAllNotes()
+        homeDao = database.homeDao()
+        allGames = homeDao.getAllGames()
     }
     fun getAllMovies(retrofitService : RetrofitService, key:String?) = retrofitService.getAllGames(key)
 
     fun insert(game: Game) {
 
         subscribeOnBackground {
-            noteDao.insert(game)
+            homeDao.insert(game)
         }
     }
 
     fun update(game: Game) {
         subscribeOnBackground {
-            noteDao.update(game)
+            homeDao.update(game)
         }
     }
 
     fun delete(game: Game) {
         subscribeOnBackground {
-            noteDao.delete(game)
+            homeDao.delete(game)
         }
     }
 
-    fun deleteAllNotes() {
+    fun deleteAllGames() {
         subscribeOnBackground {
-            noteDao.deleteAllNotes()
+            homeDao.deleteAllGames()
         }
     }
 
     fun getAllGames(): LiveData<List<Game>> {
-        return allNotes
+        return allGames
     }
     fun getAllGamesCount():Int{
-        return noteDao.getAllGamesCount()
+        return homeDao.getAllGamesCount()
     }
     fun getQueryGame(name:String): LiveData<List<Game>> {
-        return noteDao.getQueryGame(name)
+        return homeDao.getQueryGame(name)
     }
 
 

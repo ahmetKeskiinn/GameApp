@@ -13,7 +13,3 @@ data class Game(
     val game_image: String,
     @PrimaryKey val game_id: Int
 )
-
-/*val title: String,
-val description: String,
-@PrimaryKey val priority: Int*/

@@ -5,6 +5,7 @@ Programın amacı : rawg.io servisinden oyun bilgileri çekilip programda göste
 
 ## Teknik Bilgiler:
 
+* Kullanılan IDE: Android Studio
 * Kullanılan Programlama Dili: Kotlin
 * Kullanılan Mimari: MVVM
 * Kullanılan API linki: https://rawg.io/apidocs
